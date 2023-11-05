@@ -8,11 +8,6 @@ fn panic(_info: &PanicInfo) -> ! {
     loop {}
 }
 
-//#[no_mangle]
-//extern "C" fn _start() {
-//      loop{};
-//}
-
 use core::arch::asm;
 
 const SYSCALL_EXIT: usize = 93;
@@ -30,6 +25,24 @@ fn syscall(id: usize, args: [usize; 3]) -> isize {
     }
     ret
 }
+
+pub fn sys_exit(xstate: i32) -> isize {
+    syscall(SYSCALL_EXIT, [xstate as usize, 0, 0])
+}
+
+#[no_mangle]
+extern "C" fn _start() {
+    println!("Hello, world!");
+    sys_exit(9);
+}
+
+
+const SYSCALL_WRITE: usize = 64;
+
+pub fn sys_write(fd: usize, buffer: &[u8]) -> isize {
+  syscall(SYSCALL_WRITE, [fd, buffer.as_ptr() as usize, buffer.len()])
+}
+
 
 struct Stdout;
 
@@ -60,22 +73,5 @@ macro_rules! println {
     }
 }
 
-
-const SYSCALL_WRITE: usize = 64;
-
-pub fn sys_write(fd: usize, buffer: &[u8]) -> isize {
-  syscall(SYSCALL_WRITE, [fd, buffer.as_ptr() as usize, buffer.len()])
-}
-
-
-pub fn sys_exit(xstate: i32) -> isize {
-    syscall(SYSCALL_EXIT, [xstate as usize, 0, 0])
-}
-
-#[no_mangle]
-extern "C" fn _start() {
-    println!("Hello, world!");
-    sys_exit(9);
-}
 
 
