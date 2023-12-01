@@ -37,7 +37,7 @@ __alltraps:
     csrr t2, sscratch
     sd t2, 2*8(sp)
     # set input argument of trap_handler(cx: &mut TrapContext)
-    # mv a0, sp
+    mv a0, sp
     call trap_handler
 .macro LOAD_GP n
     ld x\n, \n*8(sp)
