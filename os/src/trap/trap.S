@@ -37,7 +37,7 @@ __alltraps:
     csrr t2, sscratch
     sd t2, 2*8(sp)
     # set input argument of trap_handler(cx: &mut TrapContext)
-    mv a0, sp
+    # mv a0, sp
     call trap_handler
 .macro LOAD_GP n
     ld x\n, \n*8(sp)
@@ -46,7 +46,7 @@ __alltraps:
 __restore:
     # case1: start running app by __restore
     # case2: back to U after handling trap
-    mv sp, a0
+    # mv sp, a0
     # now sp->kernel stack(after allocated), sscratch->user stack
     # restore sstatus/sepc
     ld t0, 32*8(sp)
