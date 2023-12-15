@@ -17,6 +17,9 @@ mod task;
 mod timer;
 mod mm;
 
+#[macro_use]
+extern crate bitflags;
+
 mm::init();
 
 extern crate alloc;
