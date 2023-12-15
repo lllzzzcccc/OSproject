@@ -6,10 +6,16 @@ BASE_ADDRESS = 0x0;
 SECTIONS
 {
     . = BASE_ADDRESS;
+    stext = .;
     .text : {
         *(.text.entry)
+        . = ALIGN(4K);
+        strampoline = .;
+        *(.text.trampoline);
+        . = ALIGN(4K);
         *(.text .text.*)
     }
+
     . = ALIGN(4K);
     .rodata : {
         *(.rodata .rodata.*)
