@@ -15,12 +15,11 @@ mod loader;
 mod config;
 mod task;
 mod timer;
+mod sync;
 mod mm;
 
 #[macro_use]
 extern crate bitflags;
-
-mm::init();
 
 extern crate alloc;
 
@@ -41,6 +40,7 @@ fn clear_bss() {
 pub fn rust_main() -> ! {
     clear_bss();
     println!("[kernel] Hello, world!");
+    mm::init();
     trap::init();
     loader::load_apps();
     task::run_first_task();
