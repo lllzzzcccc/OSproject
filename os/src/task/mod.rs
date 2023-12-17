@@ -2,17 +2,13 @@ mod context;
 mod switch;
 mod task;
 
-use crate::config::MAX_APP_NUM;
-use crate::loader::{get_num_app, init_app_cx};
-use core::cell::RefCell;
-use lazy_static::*;
-use switch::__switch;
-use task::{TaskControlBlock, TaskStatus};
 use crate::loader::{get_num_app, get_app_data};
 use crate::trap::TrapContext;
 use crate::sync::UPSafeCell;
+use lazy_static::*;
+use switch::__switch;
+use task::{TaskControlBlock, TaskStatus};
 use alloc::vec::Vec;
-
 
 pub use context::TaskContext;
 
@@ -154,4 +150,3 @@ pub fn current_user_token() -> usize {
 pub fn current_trap_cx() -> &'static mut TrapContext {
     TASK_MANAGER.get_current_trap_cx()
 }
-

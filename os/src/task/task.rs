@@ -1,11 +1,3 @@
-#[derive(Copy, Clone, PartialEq)]
-pub enum TaskStatus {
-    UnInit,
-    Ready,
-    Running,
-    Exited,
-}
-
 use crate::mm::{MemorySet, MapPermission, PhysPageNum, KERNEL_SPACE, VirtAddr};
 use crate::trap::{TrapContext, trap_handler};
 use crate::config::{TRAP_CONTEXT, kernel_stack_position};
@@ -63,5 +55,9 @@ impl TaskControlBlock {
     }
 }
 
-
-
+#[derive(Copy, Clone, PartialEq)]
+pub enum TaskStatus {
+    Ready,
+    Running,
+    Exited,
+}
