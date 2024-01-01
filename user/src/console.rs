@@ -1,5 +1,8 @@
 use core::fmt::{self, Write};
 use super::write;
+use super::read;
+
+const STDIN: usize = 0;
 
 const STDOUT: usize = 1;
 
@@ -11,6 +14,13 @@ impl Write for Stdout {
         Ok(())
     }
 }
+
+pub fn getchar() -> u8 {
+    let mut c = [0u8; 1];
+    read(STDIN, &mut c);
+    c[0]
+}
+
 
 pub fn print(args: fmt::Arguments) {
     Stdout.write_fmt(args).unwrap();
