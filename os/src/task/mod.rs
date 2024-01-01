@@ -41,11 +41,6 @@ fn mark_current_exited() {
     TASK_MANAGER.mark_current_exited();
 }
 
-pub fn suspend_current_and_run_next() {
-    mark_current_suspended();
-    run_next_task();
-}
-
 pub fn exit_current_and_run_next() {
     mark_current_exited();
     run_next_task();
@@ -58,3 +53,22 @@ pub fn current_user_token() -> usize {
 pub fn current_trap_cx() -> &'static mut TrapContext {
     TASK_MANAGER.get_current_trap_cx()
 }
+
+pub fn suspend_current_and_run_next() {
+    // There must be an application running.
+    let task = take_current_task().unwrap();
+
+    // ---- access current TCB exclusively
+    let mut task_inner = task.inner_exclusive_access();
+    let task_cx_ptr = &mut task_inner.task_cx as *mut TaskContext;
+    // Change status to Ready
+    task_inner.task_status = TaskStatus::Ready;
+    drop(task_inner);
+    // ---- release current PCB
+
+    // push back to ready queue.
+    add_task(task);
+    // jump to scheduling cycle
+    schedule(task_cx_ptr);
+}
+
